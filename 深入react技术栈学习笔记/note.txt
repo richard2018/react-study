@@ -1,0 +1,36 @@
+CH1 初识REACT
+1.2 jsx语法
+1.子组件注释格式: { /** **/}
+2.自定义元素最外层需要标签包裹
+3.for属性改为htmlFor
+4.Boolean属性，如checked 默认为true,如无checked属性，则默认为false
+5.自定义HTML属性
+如果在jsx中往dom元素中传人自定义属性，REACT是不会渲染的：
+<div d="xxx">content</div>
+如果要使用HTML自定义属性, 要使用data-前缀,这与html标准是一致的,如:
+<div data-attr="xxx">content</div>
+然而,在自定义标签中任意的属性都是被支持的:
+<x-my-component custom-attr="foo"/>
+6.JS属性表达式
+需要用:{},例如:
+// 输入(JSX):
+const person = <Person name={window.isLoggedIn ? window.name : ''} />;
+// 输出(JavaScript):
+const person = React.createElement(
+Person,
+{name: window.isLoggedIn ? window.name : ''} );
+
+子组件也可以作为表达式使用:
+// 输入(JSX):
+const content = <Container>{window.isLoggedIn ? <Nav /> : <Login />}</Container>;
+// 输出(JavaScript):
+const content = React.createElement(
+Container,
+null,
+window.isLoggedIn ? React.createElement(Nav) : React.createElement(Login)
+);
+
+7.HTML转义：
+不理解，需要时直接copy,记下，有个印象
+
+1.3 React组件
