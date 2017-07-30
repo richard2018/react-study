@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="immutable.js"></script>
+		<script type="text/javascript">
+		var map1 = Immutable.Map({a:1, b:2, c:3});
+		var map2 = map1.set('b', 2);
+		console.info(map1.equals(map2) === true);
+		var map3 = map1.set('b', 2);
+		console.info(map1.equals(map3) === false);
+		
+		
+		var myObject = {a:1,b:2,c:3};
+		var v1 = Immutable.Seq(myObject).map(x => x * x).toObject();
+		console.info(v1);
+		
+		var list1 = Immutable.List.of(1,2,3);
+		var list2 = list1.withMutations(function (list) {
+			list.push(4).push(5).push(6);
+		});
+		console.info(list1.size === 3);
+		console.info(list2.size === 6);
+		</script>
+	</head>
+	<body>
+		
+	</body>
+</html>

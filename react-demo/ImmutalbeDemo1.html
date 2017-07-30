@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="immutable.js"></script>
+		<script type="text/javascript">
+		var map1 = Immutable.Map({a:1, b:2, c:3});
+		var map2 = map1.set('b', 50);
+		var b1 = map1.get('b'); // 2
+		var b2 = map2.get('b'); // 50
+		console.info(b1 + " , " + b2);
+		
+	
+		</script>
+	</head>
+	<body>
+		
+	</body>
+</html>
