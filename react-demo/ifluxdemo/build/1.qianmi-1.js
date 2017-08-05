@@ -1,6 +1,6 @@
 webpackJsonp([1],{
 
-/***/ 541:
+/***/ 547:
 /***/ function(module, exports, __webpack_require__) {
 
 	Object.defineProperty(exports, "__esModule", {
@@ -22,15 +22,15 @@ webpackJsonp([1],{
 	 * 2016-06-06 21:04:49
 	 */
 	
-	var _react = __webpack_require__(299);
+	var _react = __webpack_require__(298);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _iflux = __webpack_require__(542);
+	var _iflux = __webpack_require__(548);
 	
-	var _reactRouter = __webpack_require__(475);
+	var _reactRouter = __webpack_require__(481);
 	
-	var _store = __webpack_require__(552);
+	var _store = __webpack_require__(558);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
@@ -134,27 +134,27 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 542:
+/***/ 548:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	  Store: __webpack_require__(543),
-	  connectToStore: __webpack_require__(547),
-	  Validator: __webpack_require__(548),
-	  msg: __webpack_require__(549),
+	  Store: __webpack_require__(549),
+	  connectToStore: __webpack_require__(553),
+	  Validator: __webpack_require__(554),
+	  msg: __webpack_require__(555),
 	  mixins: {
-	    StoreMixin: __webpack_require__(551)
+	    StoreMixin: __webpack_require__(557)
 	  }
 	};
 
 /***/ },
 
-/***/ 543:
+/***/ 549:
 /***/ function(module, exports, __webpack_require__) {
 
-	var Immutable = __webpack_require__(544);
-	var Cursor = __webpack_require__(545);
-	var _ = __webpack_require__(546);
+	var Immutable = __webpack_require__(550);
+	var Cursor = __webpack_require__(551);
+	var _ = __webpack_require__(552);
 	
 	/**
 	 * 封装应用的核心Store，使用Immutable来trace change
@@ -219,6 +219,11 @@ webpackJsonp([1],{
 	   * @param path cursor变化的路径
 	   */
 	  var change = (function (nextState, preState, path) {
+	    //检查cursor是不是正在的发生变化
+	    if (nextState === preState) {
+	      return;
+	    }
+	
 	    var cpath = path.join() || 'root';
 	
 	    _.log('\ncursor:path: [', cpath, ']\n', '\nstore:\n', nextState ? JSON.stringify(nextState.toJSON(), '', 2) : 'is null. (Maybe was deleted.)');
@@ -287,7 +292,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 544:
+/***/ 550:
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -525,7 +530,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 545:
+/***/ 551:
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -545,7 +550,7 @@ webpackJsonp([1],{
 	 * If you wish to use it in the browser, please check out Browserify or WebPack!
 	 */
 	
-	var Immutable = __webpack_require__(544);
+	var Immutable = __webpack_require__(550);
 	var Iterable = Immutable.Iterable;
 	var Iterator = Iterable.Iterator;
 	var Seq = Immutable.Seq;
@@ -830,7 +835,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 546:
+/***/ 552:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -899,11 +904,11 @@ webpackJsonp([1],{
 	
 	  return keyArr;
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(300)))
 
 /***/ },
 
-/***/ 547:
+/***/ 553:
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -911,9 +916,10 @@ webpackJsonp([1],{
 	 * 首先我们要解决的就是react的mixins的问题，因为es6没有对应的概念
 	 * 但是，通过高阶函数的wrapper，我们仍可以很优雅的解决这个问题。
 	 */
-	var React = __webpack_require__(299);
+	var React = __webpack_require__(298);
 	var assign = __webpack_require__(301);
 	var merge = Object.assign || assign;
+	var noop = function noop() {};
 	
 	//expose
 	module.exports = connectToStore;
@@ -927,6 +933,11 @@ webpackJsonp([1],{
 	 */
 	function connectToStore(store, reset) {
 	  return function StoreContainer(Component) {
+	    //proxy componentDidMount
+	    var proxyComponentDidMount = Component.prototype.componentDidMount || noop;
+	    //reset
+	    Component.prototype.componentDidMount = noop;
+	
 	    return React.createClass({
 	      displayName: 'StoreProvider',
 	
@@ -948,6 +959,10 @@ webpackJsonp([1],{
 	      componentDidMount: function componentDidMount() {
 	        this._mounted = true;
 	        store.onStoreChange(this._onIfluxStoreChange);
+	
+	        if (proxyComponentDidMount) {
+	          proxyComponentDidMount.call(this.App);
+	        }
 	      },
 	
 	      componentWillUpdate: function componentWillUpdate() {
@@ -964,7 +979,12 @@ webpackJsonp([1],{
 	      },
 	
 	      render: function render() {
-	        return React.createElement(Component, merge({}, this.props, { store: this.state.data }));
+	        var self = this;
+	        return React.createElement(Component, merge({}, {
+	          ref: function ref(App) {
+	            return self.App = App;
+	          }
+	        }, this.props, { store: this.state.data }));
 	      },
 	
 	      /**
@@ -983,14 +1003,14 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 548:
+/***/ 554:
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * 使用immutable主要为了好还原fieldError
 	 */
-	var Immutable = __webpack_require__(544);
-	var _ = __webpack_require__(546);
+	var Immutable = __webpack_require__(550);
+	var _ = __webpack_require__(552);
 	
 	/**
 	 * Validator框架
@@ -1571,7 +1591,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 549:
+/***/ 555:
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1589,7 +1609,7 @@ webpackJsonp([1],{
 	 * 主要想简单的使用node EventEmitter模块，其实略感这个模块有点大，其实很可以简化。
 	 * 做到一个minievent。
 	 */
-	var EventEmitter = __webpack_require__(550).EventEmitter;
+	var EventEmitter = __webpack_require__(556).EventEmitter;
 	
 	var emitter = module.exports = new EventEmitter();
 	
@@ -1598,7 +1618,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 550:
+/***/ 556:
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -1657,8 +1677,12 @@ webpackJsonp([1],{
 	      er = arguments[1];
 	      if (er instanceof Error) {
 	        throw er; // Unhandled 'error' event
-	      }
-	      throw TypeError('Uncaught, unspecified "error" event.');
+	      } else {
+	          // At least give some kind of context to the user
+	          var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+	          err.context = er;
+	          throw err;
+	        }
 	    }
 	  }
 	
@@ -1865,7 +1889,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 551:
+/***/ 557:
 /***/ function(module, exports) {
 
 	/**
@@ -1912,7 +1936,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 552:
+/***/ 558:
 /***/ function(module, exports, __webpack_require__) {
 
 	Object.defineProperty(exports, "__esModule", {
@@ -1926,17 +1950,17 @@ webpackJsonp([1],{
 	 * 2016-06-06 21:01:41
 	 */
 	
-	var _react = __webpack_require__(299);
+	var _react = __webpack_require__(298);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _immutable = __webpack_require__(544);
+	var _immutable = __webpack_require__(550);
 	
 	var _immutable2 = _interopRequireDefault(_immutable);
 	
-	var _iflux = __webpack_require__(542);
+	var _iflux = __webpack_require__(548);
 	
-	var _utilAjaxRequest = __webpack_require__(553);
+	var _utilAjaxRequest = __webpack_require__(559);
 	
 	var _utilAjaxRequest2 = _interopRequireDefault(_utilAjaxRequest);
 	
@@ -1950,7 +1974,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 553:
+/***/ 559:
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1967,7 +1991,7 @@ webpackJsonp([1],{
 	 */
 	'useStrict';
 	
-	var immutable = __webpack_require__(544);
+	var immutable = __webpack_require__(550);
 	var request = function request() {};
 	module.exports = request;
 	request.getToken = function () {
