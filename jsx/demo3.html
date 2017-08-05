@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <title>react动态组件</title>
+    <script src="../front-lib/react.js"></script>
+    <script src="../front-lib/react-dom.js"></script>
+    <script src="../front-lib/browser.min.js"></script>
+</head>
+
+<body>
+    <div id="example"></div>
+    <script type="text/babel">
+    var MyComponent=React.createClass({
+        propTypes: {
+            title: React.PropTypes.string.isRequired,
+        },
+        getInitialState: function() {
+            return {clickNum: 0};
+        },
+        handleClick:function(){
+            var num=this.state.clickNum;
+            num++;
+            this.setState({clickNum:num});
+        },
+        render: function() {
+            console.info("render...")
+            return (
+                <div>
+                    <h1 onClick={this.handleClick}>Hello {this.props.name}!</h1>
+                    <h2 style={{color:'red'}}>{this.props.title} 点击{this.props.name}次数：{this.state.clickNum}</h2>
+                </div>
+                );
+        },
+        componentDidUpdate: function() {
+        }
+    });
+    let div1 =  <div>
+                    <MyComponent name="张三" title="20" />
+                    <hr/>
+                    <MyComponent name="李四" title="30"/>
+                </div>
+    ReactDOM.render(div1,document.getElementById('example'));
+    </script>
+</body>
+
+</html>

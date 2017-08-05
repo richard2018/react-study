@@ -1,0 +1,53 @@
+<html>
+    <head>
+        <title>title</title>
+            <script src="../front-lib/react.js"></script>
+            <script src="../front-lib/react-dom.js"></script>
+            <script src="../front-lib/browser.min.js"></script>
+    </head>
+    <body>
+        <div id="example"></div>
+        <script type="text/babel">
+// 函数表达式
+/** 注意两种写法:
+1. 最常见的匿名函数写法
+(function(obj){ 
+    if(obj.props.name) 
+        return obj.props.name 
+    else 
+        return "World" 
+})(this)
+
+2. 略去括号
+function(obj){ 
+    if(obj.props.name) 
+        return obj.props.name 
+    else 
+        return "World" 
+}(this)
+
+3. 在2的基础上，最外层加括号，这个括号属于jsx的范畴
+(function(obj){ 
+    if(obj.props.name) 
+        return obj.props.name 
+    else 
+        return "World" 
+}(this))
+**/
+            var HelloMessage = React.createClass({ 
+            render: function() { 
+                return <div>Hello { 
+                    (function(obj){ 
+                        if(obj.props.name) 
+                            return obj.props.name 
+                        else 
+                            return "World" 
+                    }(this))
+                }
+                </div>; 
+                }
+            });
+            ReactDOM.render(<HelloMessage name="李叔"/>, document.getElementById("example"));
+        </script>
+    </body>
+</html>

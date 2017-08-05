@@ -1,0 +1,32 @@
+<html>
+
+<head>
+    <title>testTitle</title>
+    <script src="../front-lib/react.js"></script>
+    <script src="../front-lib/react-dom.js"></script>
+    <script src="../front-lib/browser.min.js"></script>
+    
+</head>
+<!-- 
+说明:
+1.react组件必须以大写字母开头
+2.div标签必须以小写开头 
+3.组件类只能包含一个顶层标签，否则会报错
+-->
+<body>
+    <div id="example"></div>
+    <script type="text/babel">
+        var MyComponent=React.createClass({ 
+            render: function() { 
+                return <h1>Hello world!</h1>; 
+            } 
+        }); 
+        var myReactElement = <MyComponent  />;
+        var myDivElement = <div className="foo">Hello world Div</div>;
+        //var myDivElement =<h1>你好</h1><h1>hello</h1>;  会报错
+        // ReactDOM.render(<MyComponent />, document.getElementById('example') );
+        ReactDOM.render(myReactElement, document.getElementById('example') );
+        // ReactDOM.render(myDivElement, document.getElementById("example"));
+    </script>
+</body>
+</html>
