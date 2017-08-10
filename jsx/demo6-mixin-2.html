@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title>title</title>
+            <script src="../front-lib/react.js"></script>
+            <script src="../front-lib/react-dom.js"></script>
+            <script src="../front-lib/browser.min.js"></script>
+    </head>
+    <body>
+        <div id="example"></div>
+        <script type="text/babel">
+			var LogMixin = {
+				componentWillMount: function () {
+					console.log('Component will mount');
+				},
+				componentDidMount: function () {
+					console.log('Component did mount');
+				},
+				log:function(){
+				   console.log('Mixin log');
+				}
+			};
+
+			var AComponent = React.createClass({
+				mixins: [LogMixin],
+				render: function () {
+					return (
+						<div>AComponent</div>
+					)
+				}
+			});
+
+			var BComponent = React.createClass({
+				mixins: [LogMixin],
+				componentWillMount: function () {
+					console.log('Component BComponent will mount');
+					this.log();
+				},
+				render: function () {
+					return (
+						<div>BComponent</div>
+					)
+				}
+			});	
+			 ReactDOM.render(<BComponent  />, document.getElementById("example"));
+        </script>
+    </body>
+</html>

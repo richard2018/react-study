@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>title</title>
+            <script src="../front-lib/react.js"></script>
+            <script src="../front-lib/react-dom.js"></script>
+            <script src="../front-lib/browser.min.js"></script>
+    </head>
+    <body>
+        <div id="example"></div>
+        <script type="text/babel">
+			var AComponent = React.createClass({
+				componentWillMount: function () {
+					console.log('Component will mount');
+				},
+				componentDidMount: function () {
+					console.log('Component did mount');
+				},
+				render: function () {
+					return (
+						<div>AComponent</div>
+					)
+				}
+			});
+
+			var BComponent = React.createClass({
+				componentWillMount: function () {
+					console.log('Component will mount');
+				},
+				componentDidMount: function () {
+					console.log('Component did mount');
+				},
+				render: function () {
+					return (
+						<div>BComponent</div>
+					)
+				}
+			});
+            ReactDOM.render(<AComponent  />, document.getElementById("example"));
+			 ReactDOM.render(<BComponent  />, document.getElementById("example"));
+        </script>
+    </body>
+</html>
